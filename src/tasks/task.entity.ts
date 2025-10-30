@@ -8,8 +8,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { TaskStatus } from './task.model';
-import { User } from 'src/users/user.entity';
 import { TaskLabel } from './task-label.entity';
+import { User } from './../users/user.entity';
 
 // one-to-one relationship with the User entity. User has many tasks
 @Entity()
