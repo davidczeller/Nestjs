@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import { Task } from './../tasks/task.entity';
 import {
   Column,
@@ -11,8 +12,10 @@ import {
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
+  @Expose()
   id: string;
 
+  @Expose()
   @Column({
     type: 'varchar',
     length: 100,
@@ -20,6 +23,7 @@ export class User {
   })
   name: string;
 
+  @Expose()
   @Column({
     type: 'varchar',
     length: 100,
@@ -34,6 +38,7 @@ export class User {
   })
   password: string;
 
+  @Expose()
   @CreateDateColumn({
     type: 'timestamp',
     nullable: false,
@@ -41,6 +46,7 @@ export class User {
   })
   createdAt: Date;
 
+  @Expose()
   @UpdateDateColumn({
     type: 'timestamp',
     nullable: false,
