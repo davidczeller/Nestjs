@@ -7,7 +7,7 @@ import {
   Post,
   Request,
   SerializeOptions,
-  UseGuards,
+  // UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDto } from '../create-user.dto';
@@ -17,7 +17,8 @@ import { LoginDto } from '../login.dto';
 import { LoginResponse } from '../login.response';
 import { AuthRequest } from '../auth.request';
 import { UserService } from '../user/user.service';
-import { AuthGuard } from '../auth.guard';
+import { Public } from '../decorators/public.decorator';
+// import { AuthGuard } from '../auth.guard';
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -31,12 +32,14 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @Public()
   async register(@Body() createUserDto: CreateUserDto): Promise<User> {
     const user = await this.authService.register(createUserDto);
     return user;
   }
 
   @Post('login')
+  @Public()
   async login(@Body() loginDto: LoginDto): Promise<LoginResponse> {
     const { email, password } = loginDto;
 
@@ -46,7 +49,9 @@ export class AuthController {
   }
 
   @Get('/profile')
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard) // This requires the user to be authenticated.
+  // It is global now. But we can apply custom guards to an endpoint this way.
+  // They will run after the auth guard.
   async profile(@Request() request: AuthRequest): Promise<User> {
     const user = await this.userService.findOne(request.user.sub);
 
