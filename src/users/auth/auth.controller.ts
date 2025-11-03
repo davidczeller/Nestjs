@@ -18,6 +18,9 @@ import { LoginResponse } from '../login.response';
 import { AuthRequest } from '../auth.request';
 import { UserService } from '../user/user.service';
 import { Public } from '../decorators/public.decorator';
+import { AdminResponse } from '../admin.response';
+import { Roles } from '../decorators/roles.decorator';
+import { UserRole } from '../role.enum';
 // import { AuthGuard } from '../auth.guard';
 
 @Controller('auth')
@@ -60,5 +63,12 @@ export class AuthController {
     }
 
     throw new NotFoundException('User not found');
+  }
+
+  @Get('/admin')
+  @Roles(UserRole.ADMIN)
+  // @Roles(UserRole.ADMIN, UserRole.USER) // You can also use multiple roles
+  adminOnly(): AdminResponse {
+    return new AdminResponse({ message: 'This is for admins only!' });
   }
 }

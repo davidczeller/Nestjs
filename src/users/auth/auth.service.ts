@@ -63,6 +63,7 @@ export class AuthService {
     const payload = {
       sub: user.id,
       name: user.name,
+      roles: user.roles,
     };
     return this.jwtService.sign(payload);
   }

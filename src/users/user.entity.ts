@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserRole } from './role.enum';
 
 @Entity()
 export class User {
@@ -55,5 +56,13 @@ export class User {
   updatedAt: Date;
 
   @OneToMany(() => Task, (task) => task.user)
+  @Expose()
   tasks: Task[];
+
+  @Expose()
+  @Column('text', {
+    array: true,
+    default: [UserRole.USER],
+  })
+  roles: UserRole[];
 }
