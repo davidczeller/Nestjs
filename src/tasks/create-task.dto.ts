@@ -24,8 +24,8 @@ export class CreateTaskDto {
   status: TaskStatus;
 
   // only temporary, will be removed later
-  @IsNotEmpty()
-  @IsString()
+  // @IsNotEmpty()
+  // @IsString()
   userId: string;
 
   @IsOptional()
