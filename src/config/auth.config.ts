@@ -19,8 +19,7 @@ export const authConfig = registerAs<AuthConfig>(
     jwt: {
       secret: process.env.JWT_SECRET as string,
       expiresIn:
-        (process.env
-          .JWT_EXPIRES_IN as unknown as JwtSignOptions['expiresIn']) ?? '1h', // this todo
+        (process.env.JWT_EXPIRES_IN as JwtSignOptions['expiresIn']) ?? '1h', // this todo
     },
   }),
 );

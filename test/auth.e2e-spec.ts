@@ -78,7 +78,7 @@ describe('Authentication & Authorization (e2e)', () => {
         expect(res.body.email).toEqual(testUser.email);
         expect(res.body.name).toEqual(testUser.name);
         expect(res.body).not.toHaveProperty('password');
-        console.log(res.body);
+        // console.log(res.body);
       });
   });
 
@@ -153,6 +153,39 @@ describe('Authentication & Authorization (e2e)', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.message).toEqual('This is for admins only!');
+      });
+  });
+
+  it('/auth/admin (GET) - reject non-admin access', async () => {
+    await request(testSetup.app.getHttpServer())
+      .post('/auth/register')
+      .send(testUser);
+
+    const response = await request(testSetup.app.getHttpServer())
+      .post('/auth/login')
+      .send({ email: testUser.email, password: testUser.password });
+
+    const token = response.body.accessToken;
+
+    return await request(testSetup.app.getHttpServer())
+      .get('/auth/admin')
+      // .set('Authorization', `Bearer asd`) // This will fail with a 401 error
+      .set('Authorization', `Bearer ${token}`)
+      .expect(403);
+  });
+
+  it('/auth/register (POST) - attempt to register with admin role', async () => {
+    const userAdmin = {
+      ...testUser,
+      roles: [UserRole.ADMIN],
+    };
+
+    await request(testSetup.app.getHttpServer())
+      .post('/auth/register')
+      .send(userAdmin)
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.roles).toEqual([UserRole.USER]);
       });
   });
 });
