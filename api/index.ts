@@ -3,11 +3,12 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import type { Request, Response } from 'express';
+import type { Application } from 'express';
 
 // Lazy load express to avoid initialization issues
-let app: any;
+let app: Application | null = null;
 
-async function bootstrap() {
+async function bootstrap(): Promise<Application> {
   const express = (await import('express')).default;
   const server = express();
 
@@ -27,9 +28,9 @@ async function bootstrap() {
   return server;
 }
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<void> => {
   if (!app) {
     app = await bootstrap();
   }
-  return app(req, res);
+  app(req, res, () => {});
 };
