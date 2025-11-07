@@ -1,0 +1,13 @@
+node_modules
+src
+test
+*.md
+.git
+.env
+.env.local
+coverage
+.eslintrc.js
+.prettierrc
+tsconfig.json
+nest-cli.json
+
