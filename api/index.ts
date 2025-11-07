@@ -1,29 +1,35 @@
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
+import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { AppModule } from 'src/app.module';
-import express = require('express');
+import type { Request, Response } from 'express';
 
-const server = express();
+// Lazy load express to avoid initialization issues
+let app: any;
 
-const createNestServer = async (expressInstance: express.Application) => {
-  const app = await NestFactory.create(
+async function bootstrap() {
+  const express = (await import('express')).default;
+  const server = express();
+
+  const nestApp = await NestFactory.create(
     AppModule,
-    new ExpressAdapter(expressInstance),
+    new ExpressAdapter(server),
   );
 
-  app.useGlobalPipes(
+  nestApp.useGlobalPipes(
     new ValidationPipe({
       transform: true,
       whitelist: true,
     }),
   );
 
-  return app.init();
+  await nestApp.init();
+  return server;
+}
+
+export default async (req: Request, res: Response) => {
+  if (!app) {
+    app = await bootstrap();
+  }
+  return app(req, res);
 };
-
-createNestServer(server)
-  .then(() => console.log('Nest Ready'))
-  .catch((err) => console.error('Nest broken', err));
-
-export default server;
