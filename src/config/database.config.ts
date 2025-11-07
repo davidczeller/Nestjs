@@ -12,5 +12,8 @@ export const typeOrmConfig = registerAs(
     database: process.env.DB_DATABASE,
     // only use in development mode! It will drop the database columns and tables!
     synchronize: Boolean(process.env.DB_SYNC ?? false),
+    ssl: {
+      rejectUnauthorized: false,
+    },
   }),
 );
