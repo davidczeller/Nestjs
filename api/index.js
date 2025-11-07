@@ -1,25 +1,32 @@
 const { NestFactory } = require('@nestjs/core');
-const { AppModule } = require('../dist/app.module');
 const { ValidationPipe } = require('@nestjs/common');
 
-let app;
+let cachedApp;
 
 async function bootstrap() {
-  if (!app) {
-    app = await NestFactory.create(AppModule);
-    app.useGlobalPipes(
-      new ValidationPipe({
-        transform: true,
-        whitelist: true,
-      }),
-    );
-    await app.init();
+  if (cachedApp) {
+    return cachedApp;
   }
+
+  const { AppModule } = require('../dist/app.module.js');
+  
+  const app = await NestFactory.create(AppModule);
+  
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+    }),
+  );
+
+  await app.init();
+  cachedApp = app;
+  
   return app;
 }
 
 module.exports = async (req, res) => {
-  const server = await bootstrap();
-  return server.getHttpAdapter().getInstance()(req, res);
+  const app = await bootstrap();
+  const instance = app.getHttpAdapter().getInstance();
+  return instance(req, res);
 };
-
