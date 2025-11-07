@@ -22,7 +22,7 @@
     "migration:generate": "npm run build && npm run typeorm migration:generate -- -d dist/typeorm.config.js",
     "migration:run": "npm run build && npm run typeorm migration:run -- -d dist/typeorm.config.js",
     "migration:run:prod": "npm run build && npm run typeorm migration:run -- -d dist/typeorm.config.js",
-    "vercel-build": "npm run build"
+    "vercel-build": "nest build"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
