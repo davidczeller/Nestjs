@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { AppModule } from 'src/app.module';
 import express = require('express');
 
 const server = express();
