@@ -3,13 +3,14 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import type { Application } from 'express';
-import { AppModule } from 'src/app.module';
+import { AppModule } from '../src/app.module';
 
 // Lazy load express to avoid initialization issues
 let app: Application | null = null;
 
 async function bootstrap(): Promise<Application> {
-  const express = (await import('express')).default;
+  const expressModule = await import('express');
+  const express = expressModule.default || expressModule;
   const server = express();
 
   const nestApp = await NestFactory.create(
