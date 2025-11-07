@@ -8,7 +8,7 @@ import { JwtSignOptions } from '@nestjs/jwt';
 export interface AuthConfig {
   jwt: {
     secret: string;
-    // expiresIn: string; // This won't work. Fails on typechecking.
+    // expiresIn: string; This won't work. Fails on typechecking.
     expiresIn: JwtSignOptions['expiresIn'];
   };
 }
