@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import type { Application } from 'express';
+import { AppModule } from 'src/app.module';
 
 // Lazy load express to avoid initialization issues
 let app: Application | null = null;
